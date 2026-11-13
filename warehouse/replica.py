@@ -16,14 +16,19 @@ class Inbox:
         if hashlib.sha256(raw).hexdigest()!=expected:raise ValueError('通道正文损坏')
         return self.store.put(raw)
 
-def inspect(data,store,root):
-    inbox=Inbox(store,root/'inbox')
+def compile_source(data):
+    """把合成资料中的命名引用换算为摘要链接的日志与对象。"""
     blobs={name:encode(body) for name,body in data['objects'].items()}
     hashes={name:hashlib.sha256(raw).hexdigest() for name,raw in blobs.items()}
     logs=[];log_hashes={}
     for i,item in enumerate(data['logs']):
         converted=dict(item,previous=log_hashes.get(item['previous']),manifest=[hashes[n] for n in item['manifest']])
         logs.append(converted);log_hashes[f'log-{i}']=hashlib.sha256(encode(converted)).hexdigest()
+    return blobs,hashes,logs
+
+def inspect(data,store,root):
+    inbox=Inbox(store,root/'inbox')
+    blobs,hashes,logs=compile_source(data)
     received=[]
     for event in data['delivery']:
         if event['channel']=='log':inbox.receive_log(logs[event['item']])
