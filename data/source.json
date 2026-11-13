@@ -1,0 +1,62 @@
+{
+  "logs": [
+    {
+      "epoch": 1,
+      "offset": 0,
+      "previous": null,
+      "manifest": [
+        "obj-a"
+      ]
+    },
+    {
+      "epoch": 1,
+      "offset": 1,
+      "previous": "log-0",
+      "manifest": [
+        "obj-a",
+        "obj-b"
+      ]
+    }
+  ],
+  "delivery": [
+    {
+      "channel": "log",
+      "item": 1
+    },
+    {
+      "channel": "object",
+      "item": "obj-a"
+    },
+    {
+      "channel": "log",
+      "item": 0
+    },
+    {
+      "channel": "object",
+      "item": "obj-b"
+    }
+  ],
+  "authority": [
+    {
+      "epoch": 1,
+      "holder": "east"
+    },
+    {
+      "epoch": 2,
+      "holder": "west",
+      "base_offset": 0
+    }
+  ],
+  "objects": {
+    "obj-a": {
+      "rows": [
+        0
+      ]
+    },
+    "obj-b": {
+      "rows": [
+        1
+      ]
+    }
+  }
+}
